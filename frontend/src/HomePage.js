@@ -10,7 +10,7 @@ import { Context } from "./GlobleContext";
 import UploadImages from "./UploadImages";
 
 const HomePage = () => {
-  // const [pins, setPins] = useState([]);
+ const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
   const [title, setTitle] = useState(null);
@@ -19,7 +19,7 @@ const HomePage = () => {
   const [isShown, setIsShown] = useState(false);
   const [imgLink, setImgLink] = useState(null);
 
-  const { currentUser, pins, setPins } = useContext(Context);
+  const { currentUser } = useContext(Context);
 
   // to get all the pins from the backend
   useEffect(() => {
@@ -27,7 +27,6 @@ const HomePage = () => {
       .then((res) => res.json())
       .then((res) => {
         setPins(res.data);
-        console.log(res, "<--------->");
       })
       .catch((error) => {
         console.error("Error", error);
@@ -72,7 +71,6 @@ const HomePage = () => {
       .then((res) => res.json())
       .then((res) => {
         setPins([...pins, res.data]); // to add it into the map
-        console.log(res.data);
         setNewPlace(null); // to close the popup after submit
         setImgLink(null);
       })
@@ -118,7 +116,7 @@ const HomePage = () => {
         }}
         mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         mapboxAccessToken={process.env.REACT_APP_MAPBOX}
-        onClick={handleAddNewPin}
+        onDblClick={handleAddNewPin}
       >
         {/* // usin a map to return  for each pin info */}
         {pins.map((info) => (

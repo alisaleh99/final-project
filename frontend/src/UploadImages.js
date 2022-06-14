@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const UploadImages = ({ imgLink, setImgLink }) => {
   const [SelectedImage, setSelectedImage] = useState(null);
-console.log(SelectedImage);
+
 
   const uploadPic = async (e) => {
     setSelectedImage(e.target.files[0]);

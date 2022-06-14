@@ -9,7 +9,7 @@ const GlobleContext = ({ children }) => {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassowrd] = useState();
-  const [pins, setPins] = useState([]);
+
   return (
     <Context.Provider
       value={{
@@ -25,8 +25,6 @@ const GlobleContext = ({ children }) => {
         setEmail,
         password,
         setPassowrd,
-        pins, 
-        setPins
       }}
     >
       {children}
