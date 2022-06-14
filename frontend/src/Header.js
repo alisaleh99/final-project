@@ -42,7 +42,6 @@ const Header = () => {
               }}
             >
               <H2>
-                {" "}
                 <SiYourtraveldottv />
               </H2>
               <H1>Travler:</H1>
@@ -106,7 +105,7 @@ const H1 = styled.h1`
   display: flex;
   align-items: center;
 `;
-const Acont = styled.p`
+const Acont = styled.div`
   background-color: whitesmoke;
   color: yellowgreen;
   font-size: 25px;

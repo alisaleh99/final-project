@@ -8,9 +8,10 @@ import { useEffect, useState, useContext } from "react";
 import { formatDistance } from "date-fns";
 import { Context } from "./GlobleContext";
 import UploadImages from "./UploadImages";
-
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 const HomePage = () => {
- const [pins, setPins] = useState([]);
+  const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
   const [title, setTitle] = useState(null);
@@ -18,6 +19,7 @@ const HomePage = () => {
   const [rating, setRating] = useState(0);
   const [isShown, setIsShown] = useState(false);
   const [imgLink, setImgLink] = useState(null);
+  const navigate = useNavigate();
 
   const { currentUser } = useContext(Context);
 
@@ -40,11 +42,15 @@ const HomePage = () => {
 
   // on double click add a pin
   const handleAddNewPin = (e) => {
-    const { lng, lat } = e.lngLat;
-    setNewPlace({
-      lat,
-      lng,
-    });
+    if (currentUser) {
+      const { lng, lat } = e.lngLat;
+      setNewPlace({
+        lat,
+        lng,
+      });
+    } else {
+      navigate("/signin");
+    }
   };
   // to add && submit the new info entered to the backend
   const handleSubmit = (e) => {
@@ -120,82 +126,75 @@ const HomePage = () => {
       >
         {/* // usin a map to return  for each pin info */}
         {pins.map((info) => (
-            <>
-              <Marker
-                style={{ top: "12px", left: "0", position: "absolute" }}
+          <div key={info.timeStamp}>
+            <Marker
+              style={{ top: "12px", left: "0", position: "absolute" }}
+              latitude={info.lat}
+              longitude={info.long}
+              // offsetLeft={-25}
+              offsetTop={-10}
+              anchor="bottom"
+            >
+              <FaMapMarkerAlt
+                style={{
+                  fontSize: 20,
+                  // to konw the user filling the info with blue the othars will be red
+                  color: info.name === currentUser ? "blue" : "red",
+                  cursor: "pointer",
+                }}
+                onClick={() => handleClickPin(info._id)}
+              />
+            </Marker>
+
+            {info._id === currentPlaceId && (
+              <Popup
+                style={{
+                  top: "10px",
+                  left: "10px",
+                  position: "absolute",
+                  border: "2px solid white",
+                  background: "white",
+                }}
                 latitude={info.lat}
                 longitude={info.long}
-                // offsetLeft={-10}
-              offsetTop={-10}
-                anchor="bottom"
+                closeButton={true}
+                closeOnClick={false}
+                anchor="top-left"
+                onClose={() => setCurrentPlaceId(null)}
               >
-                <FaMapMarkerAlt
-                  style={{
-                    fontSize: 20,
-                    // to konw the user filling the info with blue the othars will be red
-                    color: info.name === currentUser ? "blue" : "red",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handleClickPin(info._id)}
-                />
-              </Marker>
-                 
-              {info._id === currentPlaceId && (
-                <Popup
-                  style={{
-                    top: "10px",
-                    left: "10px",
-                    position: "absolute",
-                    border: "2px solid white",
-                    background: "white",
-                  }}
-                  latitude={info.lat}
-                  longitude={info.long}
-                  closeButton={true}
-                  closeOnClick={false}
-                  anchor="top-left"
-                  onClose={() => setCurrentPlaceId(null)}
-                >
-                  <Container>
-                    <Label>Place</Label>
-                    <h1>{info.title}</h1>
-                    <Label>Review</Label>
-                    <P>{info.desc}</P>
-                    <Label>Ratting</Label>
-                    <Stars>
-                      {/* to do the rating starts */}
-                      {Array(JSON.parse(info.rating)).fill(<AiFillStar />)}
-                    </Stars>
-                    <Img src={info.imgLink} />
-                    <Label>Information</Label>
-                    <Span>
-                      Created by <b>{info.name}</b>
-                    </Span>
-                    <Span>
-                      {formatDistance(info.timeStamp, new Date())} ago
-                    </Span>
-                  </Container>
+                <Container>
+                  <Label>Place</Label>
+                  <h1>{info.title}</h1>
+                  <Label>Review</Label>
+                  <P>{info.desc}</P>
+                  <Label>Ratting</Label>
+                  <Stars>
+                    {/* to do the rating starts */}
+                    {Array(JSON.parse(info.rating)).fill(<AiFillStar />)}
+                  </Stars>
+                  <Img src={info.imgLink} />
+                  <Label>Information</Label>
+                  <Span>
+                    Created by <b>{info.name}</b>
+                  </Span>
+                  <Span>{formatDistance(info.timeStamp, new Date())} ago</Span>
+                </Container>
 
-                  {/* if the name that signin === to the name createing the popup show the delete icon */}
-                  {info.name === currentUser && (
-                    <P3
-                      onMouseEnter={() => setIsShown(true)}
-                      onMouseLeave={() => setIsShown(false)}
-                    >
-                      <RiDeleteBin6Line
-                        onClick={() => handleDelete(info._id)}
-                      />
-                      {/* //to show the delete on hover */}
-                      {isShown && <Delete>delete</Delete>}
-                    </P3>
-                  )}
-                </Popup>
-              )}
-           
-
-            </>
-          )
-        )}
+                {/* if the name that signin === to the name createing the popup show the delete icon */}
+                {info.name === currentUser && (
+                  <P3
+                    onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)}
+                  >
+                    <RiDeleteBin6Line onClick={() => handleDelete(info._id)} />
+                    {/* //to show the delete on hover */}
+                    {isShown && <Delete>delete</Delete>}
+                  </P3>
+                )}
+              </Popup>
+            )}
+          </div>
+        ))}
 
         {newPlace && (
           <Popup
@@ -243,11 +242,9 @@ const HomePage = () => {
 
                 <Button type="submit">Add Pin</Button>
               </Form>
-              
             </div>
           </Popup>
         )}
-        
       </MapGL>
     </div>
   );
@@ -319,7 +316,7 @@ const Button = styled.button`
 const Img = styled.img`
   width: 100px;
 `;
-const P3 = styled.p`
+const P3 = styled.div`
   margin-left: 30px;
   margin-bottom: -25px;
   cursor: pointer;
