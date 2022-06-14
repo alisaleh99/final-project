@@ -49,7 +49,7 @@ const HomePage = () => {
         lng,
       });
     } else {
-      navigate("/signin");
+      navigate("/:signup");
     }
   };
   // to add && submit the new info entered to the backend
