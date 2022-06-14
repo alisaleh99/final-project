@@ -29,21 +29,31 @@ const Header = () => {
           </Link>
         </Divebuttons>
       )}
-     
-        <>
-          { currentUser && (
-            <Acont>
-             <H2> <SiYourtraveldottv /></H2>
+
+      <>
+        {currentUser && (
+          <Acont>
+            <Link
+              to={"/"}
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <H2>
+                {" "}
+                <SiYourtraveldottv />
+              </H2>
               <H1>Travler:</H1>
-              {currentUser}
-            </Acont>
-          )}
-        </>
-   
+            </Link>
+            {currentUser}
+          </Acont>
+        )}
+      </>
     </Div>
   );
 };
-
 
 const Div = styled.div`
   margin: 5px;
@@ -88,16 +98,13 @@ const Divebuttons = styled.div`
 `;
 
 const H1 = styled.h1`
-  border: 1px solid slateblue;
   color: blue;
   border: none;
   border-radius: 10px;
   font-size: 30px;
   height: 30px;
-  /* width: 130px; */
   display: flex;
   align-items: center;
- 
 `;
 const Acont = styled.p`
   background-color: whitesmoke;
@@ -111,11 +118,11 @@ const Acont = styled.p`
   padding: 5px;
   font-weight: bolder;
 `;
-const H2 =styled.h2`
-color: slateblue;
-padding: 5px;
-font-size: 30px;
-display: flex;
-align-items: center;
-`
+const H2 = styled.h2`
+  color: blue;
+  padding: 5px;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+`;
 export default Header;
