@@ -9,7 +9,7 @@ import { formatDistance } from "date-fns";
 import { Context } from "./GlobleContext";
 import UploadImages from "./UploadImages";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+
 const HomePage = () => {
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
