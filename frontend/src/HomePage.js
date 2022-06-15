@@ -170,7 +170,9 @@ const HomePage = () => {
                   <Label>Ratting</Label>
                   <Stars>
                     {/* to do the rating starts */}
-                    {Array(JSON.parse(info.rating)).fill(<AiFillStar />)}
+                    {Array(JSON.parse(info.rating)).fill(
+                      <AiFillStar key={Math.floor(Math.random()) + 1} />
+                    )}
                   </Stars>
                   <Img src={info.imgLink} />
                   <Label>Information</Label>
